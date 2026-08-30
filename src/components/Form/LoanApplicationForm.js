@@ -5,6 +5,7 @@ import {
   Button,
   Box,
   Alert,
+  Typography
 } from "@mui/material";
 import { Api } from "../../generated/commission-quote-client";
 import QuoteResult from "../Result/QuoteResult";
@@ -31,10 +32,41 @@ export default function LoanQuoteForm() {
   const [riskBand, setRiskBand] = useState("A");
   const [quote, setQuote] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loanAmountError, setLoanAmountError] = useState("");
+  const [loanTermMonthsError, setLoanTermMonthsError] = useState("");
+
+  const validatePositiveNonZeroNumber = (value) => {
+    if (value === "") return "This field is required";
+    if (Number.isNaN(Number(value)) || Number(value) <= 0) {
+      return "Must be a positive non-zero number";
+    }
+    return "";
+  };
+
+  const handleLoanAmountChange = (e) => {
+    const value = e.target.value;
+    setLoanAmount(value);
+    setLoanAmountError(validatePositiveNonZeroNumber(value));
+  };
+
+  const handleLoanTermMonthsChange = (e) => {
+    const value = e.target.value;
+    setLoanTermMonths(value);
+    setLoanTermMonthsError(validatePositiveNonZeroNumber(value));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+
+    const amountError = validatePositiveNonZeroNumber(loanAmount);
+    const termError = validatePositiveNonZeroNumber(loanTermMonths);
+    setLoanAmountError(amountError);
+    setLoanTermMonthsError(termError);
+
+    if (amountError || termError) {
+      return;
+    }
 
     try {
       const { data } = await api.commissionQuote.getCommissionQuote({
@@ -52,7 +84,7 @@ export default function LoanQuoteForm() {
       );
       setQuote(DEFAULT_QUOTE);
     }
-  };
+   };
 
   return (
     <Box sx={{ maxWidth: 320, display: "flex", flexDirection: "column", gap: 2 }}>
@@ -61,6 +93,10 @@ export default function LoanQuoteForm() {
           {errorMessage}
         </Alert>
       )}
+
+      <Typography variant="h6" gutterBottom data-testid="Application-form-header">
+          Loan Application Details
+        </Typography>
 
       <Box
         component="form"
@@ -74,7 +110,9 @@ export default function LoanQuoteForm() {
           label="Loan Amount"
           type="number"
           value={loanAmount}
-          onChange={(e) => setLoanAmount(e.target.value)}
+          onChange={handleLoanAmountChange}
+          error={Boolean(loanAmountError)}
+          helperText={loanAmountError}
           required
           fullWidth
         />
@@ -86,7 +124,9 @@ export default function LoanQuoteForm() {
           label="Loan Term (Months)"
           type="number"
           value={loanTermMonths}
-          onChange={(e) => setLoanTermMonths(e.target.value)}
+          onChange={handleLoanTermMonthsChange}
+          error={Boolean(loanTermMonthsError)}
+          helperText={loanTermMonthsError}
           required
           fullWidth
         />
