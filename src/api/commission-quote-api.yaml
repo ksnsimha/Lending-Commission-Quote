@@ -1,0 +1,52 @@
+openapi: 3.0.0
+info:
+  title: Commission Quote API
+  version: "1.0.0"
+paths:
+  /getCommissionQuote:
+    get:
+      operationId: getCommissionQuote
+      summary: Get commission quote based on loan details
+      tags:
+        - CommissionQuote
+      parameters:
+        - name: loanAmount
+          in: query
+          required: true
+          schema:
+            type: number
+            minimum: 0
+        - name: loanTermInMonths
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+        - name: riskBand
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [A, B]
+      security:
+        - ApiKeyAuth: []
+      responses:
+        "200":
+          description: Commission quote response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  quoteId:
+                    type: string
+                  commissionRate:
+                    type: number
+                  totalCommission:
+                    type: number
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: api-key
