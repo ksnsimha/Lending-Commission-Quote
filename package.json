@@ -16,20 +16,30 @@
     "@emotion/styled": "^11.11.0"
   },
   "devDependencies": {
-    "swagger-typescript-api": "^13.0.22"
-    
+    "swagger-typescript-api": "^13.0.22",
+    "storybook": "^10.5.10",
+    "@storybook/react-webpack5": "^10.5.10",
+    "@storybook/preset-create-react-app": "^10.5.10",
+    "@storybook/addon-a11y": "^10.5.10",
+    "@storybook/addon-docs": "^10.5.10",
+    "webpack": "latest",
+    "prop-types": "latest",
+    "eslint-plugin-storybook": "^10.5.10"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate:sdk": "swagger-typescript-api generate -p src/api/commission-quote-api.yaml -o src/generated -n commission-quote-client.js --js --module-name-first-tag"
+    "generate:sdk": "swagger-typescript-api generate -p src/api/commission-quote-api.yaml -o src/generated -n commission-quote-client.js --js --module-name-first-tag",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:storybook/recommended"
     ]
   },
   "browserslist": {

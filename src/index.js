@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import LoanDetailsForm from './components/LoanApplicationForm';
+import LoanDetailsForm from './components/Form/LoanApplicationForm';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
