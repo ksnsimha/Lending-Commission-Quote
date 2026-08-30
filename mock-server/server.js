@@ -29,10 +29,10 @@ app.use((req, res, next) => {
 // Chance (0 to 1) that a request randomly fails with 503, to simulate an unstable upstream
 const FAILURE_RATE = process.env.MOCK_FAILURE_RATE
   ? Number(process.env.MOCK_FAILURE_RATE)
-  : 0.8;
+  : 0.5;
 app.get("/getCommissionQuote", (req, res) => {
   if (Math.random() < FAILURE_RATE) {
-    return res.status(503).json({ message: "Service temporarily unavailable" });
+    return res.status(503).json({ message: "Service temporarily unavailable. Try again after sometime" });
   }
 
   const { loanAmount, loanTermInMonths, riskBand } = req.query;
