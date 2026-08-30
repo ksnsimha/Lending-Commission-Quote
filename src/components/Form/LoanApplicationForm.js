@@ -46,7 +46,9 @@ export default function LoanQuoteForm() {
       setQuote(data);
     } catch (err) {
       setErrorMessage(
-        err?.message || "Something went wrong while generating the quote."
+        err?.error?.message ||
+          err?.message ||
+          "Something went wrong while generating the quote."
       );
       setQuote(DEFAULT_QUOTE);
     }

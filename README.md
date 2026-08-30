@@ -12,4 +12,5 @@ I had to google and use the swagger-typescript-api module in my dev dependency i
 The script for generate:sdk was also fetched from the module help page.
 Added npx storybook@latest init to test components
 Added a Quote Result component
-Created jest test cases using Claude. Modified components to include data-testid so that its easy to do unit testing
+Created jest test cases using Claude. Modified components to include data-testid so that its easy to do unit testing.
+Instructed Claude to give me a mock server. Instructed it to randomly throw 503 error message based on env value
