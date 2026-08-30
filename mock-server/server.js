@@ -26,16 +26,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Simple in-memory mock logic based on riskBand
-const RATE_BY_RISK_BAND = {
-  A: 0.02,
-  B: 0.045,
-};
-
+// Chance (0 to 1) that a request randomly fails with 503, to simulate an unstable upstream
+const FAILURE_RATE = process.env.MOCK_FAILURE_RATE
+  ? Number(process.env.MOCK_FAILURE_RATE)
+  : 0.8;
 app.get("/getCommissionQuote", (req, res) => {
+  if (Math.random() < FAILURE_RATE) {
+    return res.status(503).json({ message: "Service temporarily unavailable" });
+  }
+
   const { loanAmount, loanTermInMonths, riskBand } = req.query;
 
-  // Basic validation, mirroring the OpenAPI spec's required params
   if (!loanAmount || !loanTermInMonths || !riskBand) {
     return res.status(400).json({
       message: "loanAmount, loanTermInMonths, and riskBand are all required",
@@ -48,14 +49,10 @@ app.get("/getCommissionQuote", (req, res) => {
     });
   }
 
-  const amount = Number(loanAmount);
-  const commissionRate = RATE_BY_RISK_BAND[riskBand];
-  const totalCommission = Number((amount * commissionRate).toFixed(2));
-
   res.json({
     quoteId: `QT-${Math.floor(100000 + Math.random() * 900000)}`,
-    commissionRate: commissionRate * 100, // as a percentage
-    totalCommission,
+    commissionRate: 2.5,
+    totalCommission: 250,
   });
 });
 
